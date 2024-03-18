@@ -1,6 +1,6 @@
 
 import re
-express = r'text("hello").isBefore(text("haha", isAfter(isBefore(text("he\"he").type("haha")))))'
+express = r'text("hello").withIn(text("haha", isAfter(isBefore(text("he\"he").type("haha")))))'
 
 
 def is_alpha(_char):
@@ -9,11 +9,10 @@ def is_alpha(_char):
     else:
         return False
 
-# def remove_escaping_char(string):
-#     return re.sub(r"\\(.)", r"\1", string)
-
-
 def remove_escaping_char(string):
+    """
+    :param string: 需要移除/"转义字符的字符串
+    """
     return re.sub(r"\\\"", "\"", string)
 
 class SelectorParser:
@@ -121,6 +120,24 @@ class SelectorParser:
             else:
                 break
         return name
-            
 
-SelectorParser(express).parse()
+parser = SelectorParser(express)
+parser.parse()
+call_result = []
+
+for index, item in enumerate(parser.call_stack):
+    if isinstance(item[0], int):
+        if item[0] == 0:
+            this_obj = "On#seed"
+        else:
+            this_obj = call_result[item[0] - 1]
+
+    params = item[2].copy()
+
+    for arg_index, arg in enumerate(params):
+        if isinstance(arg, int):
+            params[arg_index] = call_result[arg - 1]
+    
+    return_value = "On#%s" % str(index)
+    print("do call: %s %s %s, return %s" % (this_obj, item[1], params, return_value))
+    call_result.append(return_value)
