@@ -2,9 +2,13 @@
 import re
 express = r'text("hello").withIn(text("haha", isAfter(isBefore(text("he\"he").type("haha")))))'
 
+express = r'text_startswith("hello").key_startswith("hello")'
 
 def is_alpha(_char):
-    if (ord('a') <=  ord(_char) <= ord('z')) or ord('A') <=  ord(_char) <= ord('Z'):
+    """
+    判断字母
+    """
+    if (ord('a') <=  ord(_char) <= ord('z')) or ord('A') <=  ord(_char) <= ord('Z') or _char == "_":
         return True
     else:
         return False

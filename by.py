@@ -11,6 +11,12 @@ class Selector:
     def isBefore(self, anchor: 'Selector'):
         return Selector(self, "isBefore", (anchor, ))
     
+    def foreNodes(self):
+        return Selector(None, "isBefore", (self, ))
+    
+    def tearNodes(self):
+        return Selector(None, "isAfter", (self))
+    
     def __repr__(self) -> str:
         return self.__str__()
     
@@ -24,6 +30,8 @@ class Selector:
 selector = Selector().text("haha").isBefore(Selector().text("hehe"))
 print(selector)
 
+selector = Selector().text("hehe").foreNodes().text("哈哈")
+print(selector)
 
 
 
